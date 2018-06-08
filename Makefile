@@ -10,9 +10,12 @@ MPC_VER = 1.0.3
 MPFR_VER = 3.1.4
 LINUX_VER = 4.4.10
 
+GCC_SITE = https://github.com/stffrdhrn/gcc/archive
+BINUTILS_SITE = https://github.com/stffrdhrn/binutils-gdb/archive
+
 GNU_SITE = https://ftp.gnu.org/pub/gnu
-GCC_SITE = $(GNU_SITE)/gcc
-BINUTILS_SITE = $(GNU_SITE)/binutils
+# GCC_SITE = $(GNU_SITE)/gcc
+# BINUTILS_SITE = $(GNU_SITE)/binutils
 GMP_SITE = $(GNU_SITE)/gmp
 MPC_SITE = $(GNU_SITE)/mpc
 MPFR_SITE = $(GNU_SITE)/mpfr
@@ -33,7 +36,7 @@ REL_TOP = ../../..
 
 -include config.mak
 
-SRC_DIRS = gcc-$(GCC_VER) binutils-$(BINUTILS_VER) musl-$(MUSL_VER) \
+SRC_DIRS = or1k-$(GCC_VER) or1k-$(BINUTILS_VER) musl-$(MUSL_VER) \
 	$(if $(GMP_VER),gmp-$(GMP_VER)) \
 	$(if $(MPC_VER),mpc-$(MPC_VER)) \
 	$(if $(MPFR_VER),mpfr-$(MPFR_VER)) \
@@ -58,8 +61,8 @@ $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/gmp*)): SITE = $(GMP_SIT
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/mpc*)): SITE = $(MPC_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/mpfr*)): SITE = $(MPFR_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/isl*)): SITE = $(ISL_SITE)
-$(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/binutils*)): SITE = $(BINUTILS_SITE)
-$(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/gcc*)): SITE = $(GCC_SITE)/$(basename $(basename $(notdir $@)))
+$(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/or1k-2*)): SITE = $(BINUTILS_SITE)
+$(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/or1k-9*)): SITE = $(GCC_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/musl*)): SITE = $(MUSL_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/linux-4*)): SITE = $(LINUX_SITE)/v4.x
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/linux-3*)): SITE = $(LINUX_SITE)/v3.x
@@ -102,6 +105,8 @@ musl-git-%:
 	test ! -d patches/$@ || cat patches/$@/* | ( cd $@.tmp/$@ && patch -p1 )
 	test ! -f $@.tmp/$@/config.sub || cp -f $(SOURCES)/config.sub $@.tmp/$@
 	rm -rf $@
+	test ! -d $@.tmp/binutils-gdb-$@ || mv $@.tmp/binutils-gdb-$@ $@.tmp/$@
+	test ! -d $@.tmp/gcc-$@ || mv $@.tmp/gcc-$@ $@.tmp/$@
 	touch $@.tmp/$@
 	mv $@.tmp/$@ $@
 	rm -rf $@.tmp
@@ -152,8 +157,8 @@ $(BUILD_DIR)/config.mak: | $(BUILD_DIR)
 	"TARGET = $(TARGET)" \
 	"HOST = $(HOST)" \
 	"MUSL_SRCDIR = $(REL_TOP)/musl-$(MUSL_VER)" \
-	"GCC_SRCDIR = $(REL_TOP)/gcc-$(GCC_VER)" \
-	"BINUTILS_SRCDIR = $(REL_TOP)/binutils-$(BINUTILS_VER)" \
+	"GCC_SRCDIR = $(REL_TOP)/or1k-$(GCC_VER)" \
+	"BINUTILS_SRCDIR = $(REL_TOP)/or1k-$(BINUTILS_VER)" \
 	$(if $(GMP_VER),"GMP_SRCDIR = $(REL_TOP)/gmp-$(GMP_VER)") \
 	$(if $(MPC_VER),"MPC_SRCDIR = $(REL_TOP)/mpc-$(MPC_VER)") \
 	$(if $(MPFR_VER),"MPFR_SRCDIR = $(REL_TOP)/mpfr-$(MPFR_VER)") \

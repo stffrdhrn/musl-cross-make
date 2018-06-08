@@ -53,7 +53,8 @@ endif
 
 MAKE += MULTILIB_OSDIRNAMES=
 MAKE += INFO_DEPS= infodir=
-MAKE += ac_cv_prog_lex_root=lex.yy.c
+# Enabling this fails for me since I do have bison and flex, it should be lex.yy
+# MAKE += ac_cv_prog_lex_root=lex.yy.c
 MAKE += MAKEINFO=false
 
 FULL_BINUTILS_CONFIG = \
@@ -75,6 +76,7 @@ FULL_GCC_CONFIG = --enable-languages=c,c++ \
 	--disable-libmudflap --disable-libsanitizer \
 	--disable-gnu-indirect-function \
 	--disable-libmpx \
+	--disable-libssp \
 	--enable-libstdcxx-time
 
 FULL_MUSL_CONFIG = $(MUSL_CONFIG) \
