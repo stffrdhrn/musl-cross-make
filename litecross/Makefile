@@ -53,6 +53,8 @@ endif
 
 MAKE += MULTILIB_OSDIRNAMES=
 MAKE += INFO_DEPS= infodir=
+# Enabling this fails for me since I do have bison and flex, it should be lex.yy
+# MAKE += ac_cv_prog_lex_root=lex.yy.c
 MAKE += ac_cv_prog_lex_root=lex.yy
 MAKE += MAKEINFO=false
 
